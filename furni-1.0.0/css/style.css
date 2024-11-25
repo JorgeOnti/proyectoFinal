@@ -127,8 +127,8 @@ a {
       top: 0px;
       right: 0px;
       z-index: 2;
-      max-width: 780px;
-      left: -20px; }
+      left: -20px;
+      width: 500px; }
       @media (min-width: 768px) {
         .hero .hero-img-wrap img {
           right: 0px;
@@ -699,6 +699,8 @@ textarea {
 .text-primary {
   color: #3b5d50 !important; }
 
+
+  
 .thankyou-icon {
   position: relative;
   color: #3b5d50; }

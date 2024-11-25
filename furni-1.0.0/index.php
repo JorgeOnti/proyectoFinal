@@ -1,6 +1,6 @@
 <!-- /*
 * Bootstrap 5
-* Template Name: Furni
+* Template Name: ONTI'S
 * Template Author: Untree.co
 * Template URI: https://untree.co/
 * License: https://creativecommons.org/licenses/by/3.0/
@@ -21,27 +21,27 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 		<link href="css/tiny-slider.css" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
-		<title>Furni Free Bootstrap 5 Template for Furniture and Interior Design Websites by Untree.co </title>
+		<title>ONTI'S Free Bootstrap 5 Template for ONTI'Sture and Interior Design Websites by Untree.co </title>
 	</head>
 
 	<body>
 
 		<!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="ONTI'S navigation bar">
 
 			<div class="container">
-				<a class="navbar-brand" href="index.html">Furni<span>.</span></a>
+				<a class="navbar-brand" href="index.php">ONTI'S<span>.</span></a>
 
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsONTI'S" aria-controls="navbarsONTI'S" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 
-				<div class="collapse navbar-collapse" id="navbarsFurni">
+				<div class="collapse navbar-collapse" id="navbarsONTI'S">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li class="nav-item active">
-							<a class="nav-link" href="index.html">Home</a>
+							<a class="nav-link" href="index.php">Home</a>
 						</li>
-						<li><a class="nav-link" href="shop.html">Shop</a></li>
+						<li><a class="nav-link" href="shop.php">Shop</a></li>
 						<li><a class="nav-link" href="about.html">About us</a></li>
 						<li><a class="nav-link" href="services.html">Services</a></li>
 						<li><a class="nav-link" href="blog.html">Blog</a></li>
@@ -50,7 +50,7 @@
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 						<li><a class="nav-link" href="#"><img src="images/user.svg"></a></li>
-						<li><a class="nav-link" href="cart.html"><img src="images/cart.svg"></a></li>
+						<li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
 					</ul>
 				</div>
 			</div>
@@ -59,24 +59,65 @@
 		<!-- End Header/Navigation -->
 
 		<!-- Start Hero Section -->
-			<div class="hero">
-				<div class="container">
-					<div class="row justify-content-between">
-						<div class="col-lg-5">
-							<div class="intro-excerpt">
-								<h1>Modern Interior <span clsas="d-block">Design Studio</span></h1>
-								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
-								<p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
-							</div>
+		<div class="hero">
+			<div class="container">
+				<div class="row justify-content-between">
+					<div class="col-lg-5">
+						<div class="intro-excerpt">
+							<h1>
+								<?php
+								// Conexión a la base de datos
+								$host = 'localhost';
+								$dbname = 'tienda-pi'; // Cambia al nombre de tu base de datos
+								$username = 'root'; // Cambia si tienes otro usuario
+								$password = ''; // Cambia si tu usuario tiene contraseña
+
+								try {
+									$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+									$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+									// Consulta para obtener el nombre, descripción y foto del producto destacado
+									$stmt = $pdo->query("SELECT nombre, descripcion, foto FROM Productos WHERE id_producto = 1");
+									$producto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+									// Mostrar el nombre del producto si existe
+									echo htmlspecialchars($producto['nombre'] ?? 'Producto no disponible');
+								} catch (PDOException $e) {
+									echo "Error: " . $e->getMessage();
+								}
+								?>
+							</h1>
+							<p class="mb-4">
+								<?php
+								// Mostrar la descripción si existe
+								echo htmlspecialchars($producto['descripcion'] ?? 'Descripción no disponible.');
+								?>
+							</p>
+							<p>
+							<form method="POST" action="cart.php" style="display: inline;">
+								<input type="hidden" name="action" value="add">
+								<input type="hidden" name="id_producto" value="1">
+								<button type="submit" class="btn btn-secondary me-2">Shop Now</button>
+							</form>
+							<a href="shop.php" class="btn btn-white-outline">Explore</a>
+							</p>
+
 						</div>
-						<div class="col-lg-7">
-							<div class="hero-img-wrap">
-								<img src="images/couch.png" class="img-fluid">
-							</div>
+					</div>
+					<div class="col-lg-7">
+						<div class="hero-img-wrap">
+							<?php
+							if (!empty($producto['foto'])) {
+								echo '<img src="' . htmlspecialchars($producto['foto']) . '" class="img-fluid hero-img-custom" alt="Producto destacado">';
+							} else {
+								echo '<img src="images/default-product.jpg" class="img-fluid hero-img-custom" alt="Imagen no disponible">';
+							}
+							?>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 		<!-- End Hero Section -->
 
 		<!-- Start Product Section -->
@@ -86,53 +127,79 @@
 
 					<!-- Start Column 1 -->
 					<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-						<h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-						<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. </p>
-						<p><a href="shop.html" class="btn">Explore</a></p>
+						<h2 class="mb-4 section-title">Hechos con un excelente material.</h2>
+						<p class="mb-4">Atrevete a probarlos </p>
+						<p><a href="shop.php" class="btn">Explorar</a></p>
 					</div> 
 					<!-- End Column 1 -->
 
-					<!-- Start Column 2 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
-							<img src="images/product-1.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Nordic Chair</h3>
-							<strong class="product-price">$50.00</strong>
+					<?php
+					// Conexión a la base de datos
+					$host = 'localhost';
+					$dbname = 'tienda-pi'; // Cambia al nombre de tu base de datos
+					$username = 'root'; // Cambia si tienes otro usuario
+					$password = ''; // Cambia si tu usuario tiene contraseña
 
-							<span class="icon-cross">
-								<img src="images/cross.svg" class="img-fluid">
-							</span>
-						</a>
-					</div> 
+					try {
+						$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+						$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+						// Consultar información de los productos con ID 2 y 3
+						$stmt = $pdo->query("SELECT id_producto, nombre, foto, precio FROM Productos WHERE id_producto IN (2, 3, 10)");
+						$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+					} catch (PDOException $e) {
+						echo "Error en la conexión: " . $e->getMessage();
+					}
+					?>
+
+					<!-- Start Column 2 -->
+					<?php if (isset($productos[0])): ?>
+					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+						<form method="POST" action="cart.php">
+							<input type="hidden" name="action" value="add">
+							<input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($productos[0]['id_producto']); ?>">
+							<button type="submit" class="product-item btn p-0 border-0 bg-transparent">
+								<img src="<?php echo htmlspecialchars($productos[0]['foto']); ?>" class="img-fluid product-thumbnail">
+								<h3 class="product-title"><?php echo htmlspecialchars($productos[0]['nombre']); ?></h3>
+								<strong class="product-price">$<?php echo number_format($productos[0]['precio'], 2); ?></strong>
+							</button>
+						</form>
+					</div>
+					<?php endif; ?>
 					<!-- End Column 2 -->
 
 					<!-- Start Column 3 -->
+					<?php if (isset($productos[1])): ?>
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
-							<img src="images/product-2.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Kruzo Aero Chair</h3>
-							<strong class="product-price">$78.00</strong>
-
-							<span class="icon-cross">
-								<img src="images/cross.svg" class="img-fluid">
-							</span>
-						</a>
+						<form method="POST" action="cart.php">
+							<input type="hidden" name="action" value="add">
+							<input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($productos[1]['id_producto']); ?>">
+							<button type="submit" class="product-item btn p-0 border-0 bg-transparent">
+								<img src="<?php echo htmlspecialchars($productos[1]['foto']); ?>" class="img-fluid product-thumbnail">
+								<h3 class="product-title"><?php echo htmlspecialchars($productos[1]['nombre']); ?></h3>
+								<strong class="product-price">$<?php echo number_format($productos[1]['precio'], 2); ?></strong>
+							</button>
+						</form>
 					</div>
+					<?php endif; ?>
 					<!-- End Column 3 -->
 
-					<!-- Start Column 4 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
-							<img src="images/product-3.png" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Ergonomic Chair</h3>
-							<strong class="product-price">$43.00</strong>
 
-							<span class="icon-cross">
-								<img src="images/cross.svg" class="img-fluid">
-							</span>
-						</a>
+					<!-- Start Column 3 -->
+					<?php if (isset($productos[2])): ?>
+					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+						<form method="POST" action="cart.php">
+							<input type="hidden" name="action" value="add">
+							<input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($productos[1]['id_producto']); ?>">
+							<button type="submit" class="product-item btn p-0 border-0 bg-transparent">
+								<img src="<?php echo htmlspecialchars($productos[2]['foto']); ?>" class="img-fluid product-thumbnail">
+								<h3 class="product-title"><?php echo htmlspecialchars($productos[2]['nombre']); ?></h3>
+								<strong class="product-price">$<?php echo number_format($productos[2]['precio'], 2); ?></strong>
+							</button>
+						</form>
 					</div>
-					<!-- End Column 4 -->
+					<?php endif; ?>
+					<!-- End Column 3 -->
 
 				</div>
 			</div>
@@ -407,7 +474,7 @@
 						<div class="post-entry">
 							<a href="#" class="post-thumbnail"><img src="images/post-2.jpg" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
-								<h3><a href="#">How To Keep Your Furniture Clean</a></h3>
+								<h3><a href="#">How To Keep Your ONTI'Sture Clean</a></h3>
 								<div class="meta">
 									<span>by <a href="#">Robert Fox</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
 								</div>
@@ -419,7 +486,7 @@
 						<div class="post-entry">
 							<a href="#" class="post-thumbnail"><img src="images/post-3.jpg" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
-								<h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
+								<h3><a href="#">Small Space ONTI'Sture Apartment Ideas</a></h3>
 								<div class="meta">
 									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
 								</div>
@@ -465,7 +532,7 @@
 
 				<div class="row g-5 mb-5">
 					<div class="col-lg-4">
-						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">ONTI'S<span>.</span></a></div>
 						<p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant</p>
 
 						<ul class="list-unstyled custom-social">
