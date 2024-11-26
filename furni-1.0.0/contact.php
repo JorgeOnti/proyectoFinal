@@ -27,8 +27,7 @@
 	<body>
 
 		<!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="ONTI'S navigation bar">
-
+		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="ONTI'S navigation bar">
 			<div class="container">
 				<a class="navbar-brand" href="index.php">ONTI'S<span>.</span></a>
 
@@ -41,20 +40,51 @@
 						<li class="nav-item">
 							<a class="nav-link" href="index.php">Home</a>
 						</li>
-						<li><a class="nav-link" href="shop.html">Shop</a></li>
-						<li><a class="nav-link" href="about.html">About us</a></li>
-						<li><a class="nav-link" href="services.html">Services</a></li>
-						<li><a class="nav-link" href="blog.html">Blog</a></li>
-						<li class="active"><a class="nav-link" href="contact.html">Contact us</a></li>
+						<li><a class="nav-link" href="shop.php">Shop</a></li>
+						<li><a class="nav-link" href="about.php">About us</a></li>
+						<li><a class="nav-link" href="services.php">Services</a></li>
+						<li><a class="nav-link" href="blog.php">Blog</a></li>
+						<li><a class="nav-link" href="contact.php">Contact us</a></li>
+
+						<!-- Verificar si el usuario es administrador -->
+						<?php
+							session_start();
+						?>
+						<?php if (isset($_SESSION['email'])): ?>
+							
+							<?php
+							// Conectar a la base de datos
+							$host = 'localhost';
+							$dbname = 'tienda-pi';
+							$username = 'root';
+							$password = '';
+
+							try {
+								$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+								$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+								// Obtener si el usuario es administrador
+								$stmt = $pdo->prepare("SELECT es_administrador FROM usuarios WHERE correo_electronico = :email");
+								$stmt->bindParam(':email', $_SESSION['email']);
+								$stmt->execute();
+								$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+								if ($user && $user['es_administrador'] == 1): ?>
+									<li><a class="nav-link" href="admin.php">Admin</a></li>
+								<?php endif;
+							} catch (PDOException $e) {
+								echo "Error: " . $e->getMessage();
+							}
+							?>
+						<?php endif; ?>
 					</ul>
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 						<li><a class="nav-link" href="#"><img src="images/user.svg"></a></li>
-						<li><a class="nav-link" href="cart.html"><img src="images/cart.svg"></a></li>
+						<li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
 					</ul>
 				</div>
 			</div>
-				
 		</nav>
 		<!-- End Header/Navigation -->
 
