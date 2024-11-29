@@ -43,7 +43,7 @@ try {
         $stmt->execute();
 
         // Actualizar el inventario del producto
-        $stmt = $pdo->prepare("UPDATE Productos SET cantidad_en_almacen = cantidad_en_almacen - :cantidad 
+        $stmt = $pdo->prepare("UPDATE Productos SET cantidad = cantidad - :cantidad 
                                WHERE id_producto = :id_producto");
         $stmt->bindParam(':cantidad', $producto['cantidad']);
         $stmt->bindParam(':id_producto', $producto['id_producto']);

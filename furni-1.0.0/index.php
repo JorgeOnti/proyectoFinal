@@ -38,9 +38,9 @@
 				<div class="collapse navbar-collapse" id="navbarsONTI'S">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li class="nav-item">
-							<a class="nav-link" href="index.php">Home</a>
+							<a class="nav-link" href="index.php">Inicio</a>
 						</li>
-						<li><a class="nav-link" href="shop.php">Shop</a></li>
+						<li><a class="nav-link" href="shop.php">Explorar</a></li>
 						<li><a class="nav-link" href="about.html">About us</a></li>
 						<li><a class="nav-link" href="services.php">Services</a></li>
 						<li><a class="nav-link" href="blog.html">Blog</a></li>
@@ -128,7 +128,7 @@
 							<form method="POST" action="cart.php" style="display: inline;">
 								<input type="hidden" name="action" value="add">
 								<input type="hidden" name="id_producto" value="1">
-								<button type="submit" class="btn btn-secondary me-2">Shop Now</button>
+								<button type="submit" class="btn btn-secondary me-2">Comprar ahora</button>
 							</form>
 							<a href="shop.php" class="btn btn-white-outline">Explore</a>
 							</p>
@@ -216,7 +216,7 @@
 					<!-- End Column 3 -->
 
 
-					<!-- Start Column 3 -->
+					<!-- Start Column 4 -->
 					<?php if (isset($productos[2])): ?>
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
 						<form method="POST" action="cart.php">
@@ -230,7 +230,7 @@
 						</form>
 					</div>
 					<?php endif; ?>
-					<!-- End Column 3 -->
+					<!-- End Column 4 -->
 
 				</div>
 			</div>
@@ -261,7 +261,7 @@
 									<div class="icon">
 										<img src="images/bag.svg" alt="Image" class="imf-fluid">
 									</div>
-									<h3>Easy to Shop</h3>
+									<h3>Easy to Explorar</h3>
 									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
 								</div>
 							</div>
@@ -493,7 +493,7 @@
 						<div class="post-entry">
 							<a href="#" class="post-thumbnail"><img src="images/post-1.jpg" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
-								<h3><a href="#">First Time Home Owner Ideas</a></h3>
+								<h3><a href="#">First Time Inicio Owner Ideas</a></h3>
 								<div class="meta">
 									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
 								</div>
