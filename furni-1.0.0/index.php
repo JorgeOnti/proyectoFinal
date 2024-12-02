@@ -7,638 +7,445 @@
 */ -->
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="Untree.co">
-  <link rel="shortcut icon" href="favicon.png">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Untree.co">
+	<link rel="shortcut icon" href="favicon.png">
 
-  <meta name="description" content="" />
-  <meta name="keywords" content="bootstrap, bootstrap4" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="bootstrap, bootstrap4" />
 
-		<!-- Bootstrap CSS -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-		<link href="css/tiny-slider.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
-		<title>ONTI'S Free Bootstrap 5 Template for ONTI'Sture and Interior Design Websites by Untree.co </title>
-	</head>
+	<!-- Bootstrap CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+	<link href="css/tiny-slider.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<title>ONTI'S Free Bootstrap 5 Template for ONTI'Sture and Interior Design Websites by Untree.co </title>
+</head>
 
-	<body>
+<body>
 
-		<!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="ONTI'S navigation bar">
-			<div class="container">
-				<a class="navbar-brand" href="index.php">ONTI'S<span>.</span></a>
+	<!-- Start Header/Navigation -->
+	<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="ONTI'S navigation bar">
+		<div class="container">
+			<a class="navbar-brand" href="index.php">ONTI'S<span>.</span></a>
 
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsONTI'S" aria-controls="navbarsONTI'S" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsONTI'S"
+				aria-controls="navbarsONTI'S" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-				<div class="collapse navbar-collapse" id="navbarsONTI'S">
-					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-						<li class="nav-item">
-							<a class="nav-link" href="index.php">Inicio</a>
+			<div class="collapse navbar-collapse" id="navbarsONTI'S">
+				<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+					<li class="nav-item">
+						<a class="nav-link" href="index.php">Inicio</a>
+					</li>
+					<li><a class="nav-link" href="shop.php">Explorar</a></li>
+					<li><a class="nav-link" href="about.php">About us</a></li>
+					<li><a class="nav-link" href="contact.php">Contact us</a></li>
+
+					<!-- Verificar si el usuario es administrador -->
+					<?php
+					if (session_status() === PHP_SESSION_NONE) {
+						session_start();
+					}
+
+					if (!isset($_SESSION['email'])) {
+						header("Location: login.php");
+						exit();
+					}
+
+					if (isset($_SESSION['email'])):
+						// Conectar a la base de datos
+						$host = 'localhost';
+						$dbname = 'tienda-pi';
+						$username = 'root';
+						$password = '';
+
+						try {
+							$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+							$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+							// Obtener si el usuario es administrador
+							$stmt = $pdo->prepare("SELECT es_administrador FROM usuarios WHERE correo_electronico = :email");
+							$stmt->bindParam(':email', $_SESSION['email']);
+							$stmt->execute();
+							$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+							if ($user && $user['es_administrador'] == 1): ?>
+								<li><a class="nav-link" href="admin.php">Admin</a></li>
+							<?php endif;
+						} catch (PDOException $e) {
+							echo "Error: " . $e->getMessage();
+						}
+					endif;
+					?>
+				</ul>
+
+				<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+					<!-- Verificar si el usuario ha iniciado sesión -->
+					<?php if (isset($_SESSION['email'])): ?>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">
+								<img src="images/user.svg" alt="User">
+							</a>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+								<li><a class="dropdown-item" href="perfil.php">Perfil</a></li>
+								<li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
+							</ul>
 						</li>
-						<li><a class="nav-link" href="shop.php">Explorar</a></li>
-						<li><a class="nav-link" href="about.html">About us</a></li>
-						<li><a class="nav-link" href="services.php">Services</a></li>
-						<li><a class="nav-link" href="blog.html">Blog</a></li>
-						<li><a class="nav-link" href="contact.php">Contact us</a></li>
+					<?php else: ?>
+						<li>
+							<a class="nav-link" href="login.php"><img src="images/user.svg" alt="User"> Iniciar sesión</a>
+						</li>
+					<?php endif; ?>
+					<li><a class="nav-link" href="cart.php"><img src="images/cart.svg" alt="Cart"></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- End Header/Navigation -->
 
-						<!-- Verificar si el usuario es administrador -->
-						<?php
-							session_start();
-						?>
-						<?php if (isset($_SESSION['email'])): ?>
-							
+
+	<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt">
+						<h1>
 							<?php
-							// Conectar a la base de datos
+							// Conexión a la base de datos
 							$host = 'localhost';
-							$dbname = 'tienda-pi';
-							$username = 'root';
-							$password = '';
-
+							$dbname = 'tienda-pi'; // Cambia al nombre de tu base de datos
+							$username = 'root'; // Cambia si tienes otro usuario
+							$password = ''; // Cambia si tu usuario tiene contraseña
+							
 							try {
 								$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 								$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-								// Obtener si el usuario es administrador
-								$stmt = $pdo->prepare("SELECT es_administrador FROM usuarios WHERE correo_electronico = :email");
-								$stmt->bindParam(':email', $_SESSION['email']);
-								$stmt->execute();
-								$user = $stmt->fetch(PDO::FETCH_ASSOC);
+								// Consulta para obtener el nombre, descripción y foto del producto destacado
+								$stmt = $pdo->query("SELECT nombre, descripcion, foto FROM Productos WHERE id_producto = 1");
+								$producto = $stmt->fetch(PDO::FETCH_ASSOC);
 
-								if ($user && $user['es_administrador'] == 1): ?>
-									<li><a class="nav-link" href="admin.php">Admin</a></li>
-								<?php endif;
+								// Mostrar el nombre del producto si existe
+								echo htmlspecialchars($producto['nombre'] ?? 'Producto no disponible');
 							} catch (PDOException $e) {
 								echo "Error: " . $e->getMessage();
 							}
 							?>
-						<?php endif; ?>
-					</ul>
-
-					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="#"><img src="images/user.svg"></a></li>
-						<li><a class="nav-link" href="cart.php"><img src="images/cart.svg"></a></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-		<!-- End Header/Navigation -->
-
-
-		<!-- Start Hero Section -->
-		<div class="hero">
-			<div class="container">
-				<div class="row justify-content-between">
-					<div class="col-lg-5">
-						<div class="intro-excerpt">
-							<h1>
-								<?php
-								// Conexión a la base de datos
-								$host = 'localhost';
-								$dbname = 'tienda-pi'; // Cambia al nombre de tu base de datos
-								$username = 'root'; // Cambia si tienes otro usuario
-								$password = ''; // Cambia si tu usuario tiene contraseña
-
-								try {
-									$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-									$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-									// Consulta para obtener el nombre, descripción y foto del producto destacado
-									$stmt = $pdo->query("SELECT nombre, descripcion, foto FROM Productos WHERE id_producto = 1");
-									$producto = $stmt->fetch(PDO::FETCH_ASSOC);
-
-									// Mostrar el nombre del producto si existe
-									echo htmlspecialchars($producto['nombre'] ?? 'Producto no disponible');
-								} catch (PDOException $e) {
-									echo "Error: " . $e->getMessage();
-								}
-								?>
-							</h1>
-							<p class="mb-4">
-								<?php
-								// Mostrar la descripción si existe
-								echo htmlspecialchars($producto['descripcion'] ?? 'Descripción no disponible.');
-								?>
-							</p>
-							<p>
-							<form method="POST" action="cart.php" style="display: inline;">
-								<input type="hidden" name="action" value="add">
-								<input type="hidden" name="id_producto" value="1">
-								<button type="submit" class="btn btn-secondary me-2">Comprar ahora</button>
-							</form>
-							<a href="shop.php" class="btn btn-white-outline">Explore</a>
-							</p>
-
-						</div>
-					</div>
-					<div class="col-lg-7">
-						<div class="hero-img-wrap">
+						</h1>
+						<p class="mb-4">
 							<?php
-							if (!empty($producto['foto'])) {
-								echo '<img src="' . htmlspecialchars($producto['foto']) . '" class="img-fluid hero-img-custom" alt="Producto destacado">';
-							} else {
-								echo '<img src="images/default-product.jpg" class="img-fluid hero-img-custom" alt="Imagen no disponible">';
-							}
+							// Mostrar la descripción si existe
+							echo htmlspecialchars($producto['descripcion'] ?? 'Descripción no disponible.');
 							?>
-						</div>
+						</p>
+						<p>
+						<form method="POST" action="cart.php" style="display: inline;">
+							<input type="hidden" name="action" value="add">
+							<input type="hidden" name="id_producto" value="1">
+							<button type="submit" class="btn btn-secondary me-2">Comprar ahora</button>
+						</form>
+						<a href="shop.php" class="btn btn-white-outline">Explorar</a>
+						</p>
+
+					</div>
+				</div>
+				<div class="col-lg-7">
+					<div class="hero-img-wrap">
+						<?php
+						if (!empty($producto['foto'])) {
+							echo '<img src="' . htmlspecialchars($producto['foto']) . '" class="img-fluid hero-img-custom" alt="Producto destacado">';
+						} else {
+							echo '<img src="images/default-product.jpg" class="img-fluid hero-img-custom" alt="Imagen no disponible">';
+						}
+						?>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- End Hero Section -->
+	</div>
+	<!-- End Hero Section -->
 
-		<!-- Start Product Section -->
-		<div class="product-section">
-			<div class="container">
-				<div class="row">
+	<!-- Start Product Section -->
+	<div class="product-section">
+		<div class="container">
+			<div class="row">
 
-					<!-- Start Column 1 -->
-					<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-						<h2 class="mb-4 section-title">Hechos con un excelente material.</h2>
-						<p class="mb-4">Atrevete a probarlos </p>
-						<p><a href="shop.php" class="btn">Explorar</a></p>
-					</div> 
-					<!-- End Column 1 -->
+				<!-- Start Column 1 -->
+				<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+					<h2 class="mb-4 section-title">Hechos con un excelente material.</h2>
+					<p class="mb-4">Atrevete a probarlos </p>
+					<p><a href="shop.php" class="btn">Explorar</a></p>
+				</div>
+				<!-- End Column 1 -->
 
-					<?php
-					// Conexión a la base de datos
-					$host = 'localhost';
-					$dbname = 'tienda-pi'; // Cambia al nombre de tu base de datos
-					$username = 'root'; // Cambia si tienes otro usuario
-					$password = ''; // Cambia si tu usuario tiene contraseña
+				<?php
+				// Conexión a la base de datos
+				$host = 'localhost';
+				$dbname = 'tienda-pi'; // Cambia al nombre de tu base de datos
+				$username = 'root'; // Cambia si tienes otro usuario
+				$password = ''; // Cambia si tu usuario tiene contraseña
+				
+				try {
+					$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+					$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-					try {
-						$pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-						$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					// Consultar información de los productos con ID 2 y 3
+					$stmt = $pdo->query("SELECT id_producto, nombre, foto, precio FROM Productos WHERE id_producto IN (2, 3, 10)");
+					$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				} catch (PDOException $e) {
+					echo "Error en la conexión: " . $e->getMessage();
+				}
+				?>
 
-						// Consultar información de los productos con ID 2 y 3
-						$stmt = $pdo->query("SELECT id_producto, nombre, foto, precio FROM Productos WHERE id_producto IN (2, 3, 10)");
-						$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-					} catch (PDOException $e) {
-						echo "Error en la conexión: " . $e->getMessage();
-					}
-					?>
-
-					<!-- Start Column 2 -->
-					<?php if (isset($productos[0])): ?>
+				<!-- Start Column 2 -->
+				<?php if (isset($productos[0])): ?>
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
 						<form method="POST" action="cart.php">
 							<input type="hidden" name="action" value="add">
-							<input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($productos[0]['id_producto']); ?>">
+							<input type="hidden" name="id_producto"
+								value="<?php echo htmlspecialchars($productos[0]['id_producto']); ?>">
 							<button type="submit" class="product-item btn p-0 border-0 bg-transparent">
-								<img src="<?php echo htmlspecialchars($productos[0]['foto']); ?>" class="img-fluid product-thumbnail">
+								<img src="<?php echo htmlspecialchars($productos[0]['foto']); ?>"
+									class="img-fluid product-thumbnail">
 								<h3 class="product-title"><?php echo htmlspecialchars($productos[0]['nombre']); ?></h3>
-								<strong class="product-price">$<?php echo number_format($productos[0]['precio'], 2); ?></strong>
+								<strong
+									class="product-price">$<?php echo number_format($productos[0]['precio'], 2); ?></strong>
 							</button>
 						</form>
 					</div>
-					<?php endif; ?>
-					<!-- End Column 2 -->
+				<?php endif; ?>
+				<!-- End Column 2 -->
 
-					<!-- Start Column 3 -->
-					<?php if (isset($productos[1])): ?>
+				<!-- Start Column 3 -->
+				<?php if (isset($productos[1])): ?>
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
 						<form method="POST" action="cart.php">
 							<input type="hidden" name="action" value="add">
-							<input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($productos[1]['id_producto']); ?>">
+							<input type="hidden" name="id_producto"
+								value="<?php echo htmlspecialchars($productos[1]['id_producto']); ?>">
 							<button type="submit" class="product-item btn p-0 border-0 bg-transparent">
-								<img src="<?php echo htmlspecialchars($productos[1]['foto']); ?>" class="img-fluid product-thumbnail">
+								<img src="<?php echo htmlspecialchars($productos[1]['foto']); ?>"
+									class="img-fluid product-thumbnail">
 								<h3 class="product-title"><?php echo htmlspecialchars($productos[1]['nombre']); ?></h3>
-								<strong class="product-price">$<?php echo number_format($productos[1]['precio'], 2); ?></strong>
+								<strong
+									class="product-price">$<?php echo number_format($productos[1]['precio'], 2); ?></strong>
 							</button>
 						</form>
 					</div>
-					<?php endif; ?>
-					<!-- End Column 3 -->
+				<?php endif; ?>
+				<!-- End Column 3 -->
 
 
-					<!-- Start Column 4 -->
-					<?php if (isset($productos[2])): ?>
+				<!-- Start Column 4 -->
+				<?php if (isset($productos[2])): ?>
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
 						<form method="POST" action="cart.php">
 							<input type="hidden" name="action" value="add">
-							<input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($productos[1]['id_producto']); ?>">
+							<input type="hidden" name="id_producto"
+								value="<?php echo htmlspecialchars($productos[2]['id_producto']); ?>">
 							<button type="submit" class="product-item btn p-0 border-0 bg-transparent">
-								<img src="<?php echo htmlspecialchars($productos[2]['foto']); ?>" class="img-fluid product-thumbnail">
+								<img src="<?php echo htmlspecialchars($productos[2]['foto']); ?>"
+									class="img-fluid product-thumbnail">
 								<h3 class="product-title"><?php echo htmlspecialchars($productos[2]['nombre']); ?></h3>
-								<strong class="product-price">$<?php echo number_format($productos[2]['precio'], 2); ?></strong>
+								<strong
+									class="product-price">$<?php echo number_format($productos[2]['precio'], 2); ?></strong>
 							</button>
 						</form>
 					</div>
-					<?php endif; ?>
-					<!-- End Column 4 -->
+				<?php endif; ?>
+				<!-- End Column 4 -->
 
-				</div>
 			</div>
 		</div>
-		<!-- End Product Section -->
+	</div>
+	<!-- End Product Section -->
 
-		<!-- Start Why Choose Us Section -->
-		<div class="why-choose-section">
-			<div class="container">
-				<div class="row justify-content-between">
-					<div class="col-lg-6">
-						<h2 class="section-title">Why Choose Us</h2>
-						<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+	<!-- Start Why Choose Us Section -->
+	<div class="why-choose-section">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-6">
+					<h2 class="section-title">¿Por qué elegirnos?</h2>
+					<p>Somos especialistas en calzado de fútbol. Nuestro compromiso es ofrecerte la mejor calidad,
+						diseño y tecnología para que des lo mejor en cada partido.</p>
 
-						<div class="row my-5">
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="images/truck.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Fast &amp; Free Shipping</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+					<div class="row my-5">
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/truck.svg" alt="Envío rápido y seguro" class="imf-fluid">
 								</div>
+								<h3>Envío rápido y seguro</h3>
+								<p>Te garantizamos entregas rápidas y seguras para que recibas tus zapatos a tiempo y
+									sin problemas.</p>
 							</div>
-
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="images/bag.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Easy to Explorar</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
-								</div>
-							</div>
-
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="images/support.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>24/7 Support</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
-								</div>
-							</div>
-
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="images/return.svg" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Hassle Free Returns</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
-								</div>
-							</div>
-
 						</div>
-					</div>
 
-					<div class="col-lg-5">
-						<div class="img-wrap">
-							<img src="images/why-choose-us-img.jpg" alt="Image" class="img-fluid">
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/bag.svg" alt="Variedad y diseño" class="imf-fluid">
+								</div>
+								<h3>Variedad y diseño</h3>
+								<p>Contamos con una amplia selección de modelos diseñados para maximizar tu rendimiento
+									en el campo.</p>
+							</div>
 						</div>
-					</div>
 
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/support.svg" alt="Asistencia 24/7" class="imf-fluid">
+								</div>
+								<h3>Asistencia personalizada</h3>
+								<p>Nuestro equipo está disponible 24/7 para ayudarte a elegir el calzado perfecto y
+									resolver cualquier duda.</p>
+							</div>
+						</div>
+
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/return.svg" alt="Devoluciones fáciles" class="imf-fluid">
+								</div>
+								<h3>Devoluciones sin complicaciones</h3>
+								<p>Si no estás completamente satisfecho, ofrecemos devoluciones rápidas y sencillas para
+									tu tranquilidad.</p>
+							</div>
+						</div>
+
+					</div>
 				</div>
+
+				<div class="col-lg-5">
+					<div class="img-wrap">
+						<img src="images/fut.png" alt="Nuestros zapatos de fútbol" class="img-fluid">
+					</div>
+				</div>
+
 			</div>
 		</div>
-		<!-- End Why Choose Us Section -->
+	</div>
+	<!-- End Why Choose Us Section -->
 
-		<!-- Start We Help Section -->
-		<div class="we-help-section">
-			<div class="container">
-				<div class="row justify-content-between">
-					<div class="col-lg-7 mb-5 mb-lg-0">
-						<div class="imgs-grid">
-							<div class="grid grid-1"><img src="images/img-grid-1.jpg" alt="Untree.co"></div>
-							<div class="grid grid-2"><img src="images/img-grid-2.jpg" alt="Untree.co"></div>
-							<div class="grid grid-3"><img src="images/img-grid-3.jpg" alt="Untree.co"></div>
-						</div>
-					</div>
-					<div class="col-lg-5 ps-lg-5">
-						<h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
-						<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada</p>
 
-						<ul class="list-unstyled custom-list my-4">
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-						</ul>
-						<p><a herf="#" class="btn">Explore</a></p>
-					</div>
+	<!-- Start Testimonial Slider -->
+	<div class="testimonial-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-7 mx-auto text-center">
+					<h2 class="section-title">Testimonios</h2>
 				</div>
 			</div>
-		</div>
-		<!-- End We Help Section -->
 
-		<!-- Start Popular Product -->
-		<div class="popular-product">
-			<div class="container">
-				<div class="row">
+			<div class="row justify-content-center">
+				<div class="col-lg-12">
+					<div class="testimonial-slider-wrap text-center">
 
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="images/product-1.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Nordic Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
+						<div id="testimonial-nav">
+							<span class="prev" data-controls="prev"><span class="fa fa-chevron-left"></span></span>
+							<span class="next" data-controls="next"><span class="fa fa-chevron-right"></span></span>
 						</div>
-					</div>
 
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="images/product-2.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Kruzo Aero Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
+						<div class="testimonial-slider">
 
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="images/product-3.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Ergonomic Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
+							<div class="item">
+								<div class="row justify-content-center">
+									<div class="col-lg-8 mx-auto">
 
-				</div>
-			</div>
-		</div>
-		<!-- End Popular Product -->
+										<div class="testimonial-block text-center">
+											<blockquote class="mb-5">
+												<p>&ldquo;Los mejores zapatos de fútbol que he usado. La calidad es
+													impresionante y la comodidad es inigualable. Ahora puedo jugar al
+													máximo nivel.&rdquo;</p>
+											</blockquote>
 
-		<!-- Start Testimonial Slider -->
-		<div class="testimonial-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-7 mx-auto text-center">
-						<h2 class="section-title">Testimonials</h2>
-					</div>
-				</div>
-
-				<div class="row justify-content-center">
-					<div class="col-lg-12">
-						<div class="testimonial-slider-wrap text-center">
-
-							<div id="testimonial-nav">
-								<span class="prev" data-controls="prev"><span class="fa fa-chevron-left"></span></span>
-								<span class="next" data-controls="next"><span class="fa fa-chevron-right"></span></span>
-							</div>
-
-							<div class="testimonial-slider">
-								
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
-
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
-
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
+											<div class="author-info">
+												<div class="author-pic">
+													<img src="images/person_1.jpg" alt="Carlos Sánchez"
+														class="img-fluid">
 												</div>
+												<h3 class="font-weight-bold">Carlos Sánchez</h3>
+												<span class="position d-block mb-3">Jugador de fútbol amateur</span>
 											</div>
-
 										</div>
+
 									</div>
-								</div> 
-								<!-- END item -->
-
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
-
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
-
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
-
-										</div>
-									</div>
-								</div> 
-								<!-- END item -->
-
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
-
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
-
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
-
-										</div>
-									</div>
-								</div> 
-								<!-- END item -->
-
+								</div>
 							</div>
+							<!-- END item -->
+
+							<div class="item">
+								<div class="row justify-content-center">
+									<div class="col-lg-8 mx-auto">
+
+										<div class="testimonial-block text-center">
+											<blockquote class="mb-5">
+												<p>&ldquo;Compré estos zapatos para mi hijo y está encantado. La
+													durabilidad y el diseño superaron nuestras expectativas. ¡Gracias
+													ONTI'S!&rdquo;</p>
+											</blockquote>
+
+											<div class="author-info">
+												<div class="author-pic">
+													<img src="images/person_2.jpg" alt="José Gómez" class="img-fluid">
+												</div>
+												<h3 class="font-weight-bold">José Gómez</h3>
+												<span class="position d-block mb-3">Padre de un joven futbolista</span>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<!-- END item -->
+
+							<div class="item">
+								<div class="row justify-content-center">
+									<div class="col-lg-8 mx-auto">
+
+										<div class="testimonial-block text-center">
+											<blockquote class="mb-5">
+												<p>&ldquo;Soy entrenador de un equipo juvenil y todos mis jugadores
+													están fascinados con estos zapatos. Brindan un excelente agarre y
+													soporte durante los partidos.&rdquo;</p>
+											</blockquote>
+
+											<div class="author-info">
+												<div class="author-pic">
+													<img src="images/person_3.jpg" alt="Diego Martínez"
+														class="img-fluid">
+												</div>
+												<h3 class="font-weight-bold">Diego Martínez</h3>
+												<span class="position d-block mb-3">Entrenador de fútbol</span>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<!-- END item -->
 
 						</div>
+
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- End Testimonial Slider -->
-
-		<!-- Start Blog Section -->
-		<div class="blog-section">
-			<div class="container">
-				<div class="row mb-5">
-					<div class="col-md-6">
-						<h2 class="section-title">Recent Blog</h2>
-					</div>
-					<div class="col-md-6 text-start text-md-end">
-						<a href="#" class="more">View All Posts</a>
-					</div>
-				</div>
-
-				<div class="row">
-
-					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-1.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">First Time Inicio Owner Ideas</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-2.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">How To Keep Your ONTI'Sture Clean</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Robert Fox</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-3.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">Small Space ONTI'Sture Apartment Ideas</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-		<!-- End Blog Section -->	
-
-		<!-- Start Footer Section -->
-		<footer class="footer-section">
-			<div class="container relative">
-
-				<div class="sofa-img">
-					<img src="images/sofa.png" alt="Image" class="img-fluid">
-				</div>
-
-				<div class="row">
-					<div class="col-lg-8">
-						<div class="subscription-form">
-							<h3 class="d-flex align-items-center"><span class="me-1"><img src="images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
-
-							<form action="#" class="row g-3">
-								<div class="col-auto">
-									<input type="text" class="form-control" placeholder="Enter your name">
-								</div>
-								<div class="col-auto">
-									<input type="email" class="form-control" placeholder="Enter your email">
-								</div>
-								<div class="col-auto">
-									<button class="btn btn-primary">
-										<span class="fa fa-paper-plane"></span>
-									</button>
-								</div>
-							</form>
-
-						</div>
-					</div>
-				</div>
-
-				<div class="row g-5 mb-5">
-					<div class="col-lg-4">
-						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">ONTI'S<span>.</span></a></div>
-						<p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant</p>
-
-						<ul class="list-unstyled custom-social">
-							<li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-twitter"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-instagram"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-linkedin"></span></a></li>
-						</ul>
-					</div>
-
-					<div class="col-lg-8">
-						<div class="row links-wrap">
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">About us</a></li>
-									<li><a href="#">Services</a></li>
-									<li><a href="#">Blog</a></li>
-									<li><a href="#">Contact us</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Support</a></li>
-									<li><a href="#">Knowledge base</a></li>
-									<li><a href="#">Live chat</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Jobs</a></li>
-									<li><a href="#">Our team</a></li>
-									<li><a href="#">Leadership</a></li>
-									<li><a href="#">Privacy Policy</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Nordic Chair</a></li>
-									<li><a href="#">Kruzo Aero</a></li>
-									<li><a href="#">Ergonomic Chair</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="border-top copyright">
-					<div class="row pt-4">
-						<div class="col-lg-6">
-							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>  <!-- License information: https://untree.co/license/ -->
-            </p>
-						</div>
-
-						<div class="col-lg-6 text-center text-lg-end">
-							<ul class="list-unstyled d-inline-flex ms-auto">
-								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-							</ul>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
-		</footer>
-		<!-- End Footer Section -->	
+	</div>
+	<!-- End Testimonial Slider -->
 
 
-		<script src="js/bootstrap.bundle.min.js"></script>
-		<script src="js/tiny-slider.js"></script>
-		<script src="js/custom.js"></script>
-	</body>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/tiny-slider.js"></script>
+	<script src="js/custom.js"></script>
+</body>
 
 </html>

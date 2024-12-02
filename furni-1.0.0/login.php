@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+// Verificar si ya hay una sesión activa
+if (isset($_SESSION['email'])) {
+    header("Location: index.php");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Conexión a la base de datos
     $host = 'localhost';
@@ -25,7 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($usuario && password_verify($clave, $usuario['contrasena'])) {
             // Credenciales correctas, iniciar sesión
             $_SESSION['email'] = $correo;
-            header("Location: index.php");
+
+            // Redirigir al index u otra página según el estado previo
+            $redirectUrl = isset($_SESSION['redirect_url']) ? $_SESSION['redirect_url'] : 'index.php';
+            unset($_SESSION['redirect_url']); // Limpiar la URL de redirección
+            header("Location: $redirectUrl");
             exit();
         } else {
             // Credenciales incorrectas
@@ -36,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>

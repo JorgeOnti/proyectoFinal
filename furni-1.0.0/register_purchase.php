@@ -55,8 +55,27 @@ try {
     $stmt->bindParam(':id_usuario', $id_usuario);
     $stmt->execute();
 
+    // Guardar dirección si se seleccionó la opción
+    if (isset($_POST['guardar_direccion'])) {
+        $direccion = $_POST['c_address'] ?? '';
+        $ciudad = $_POST['c_city'] ?? '';
+        $codigo_postal = $_POST['c_postal_zip'] ?? '';
+        $pais = $_POST['c_state_country'] ?? '';
+
+        if (!empty($direccion) && !empty($ciudad) && !empty($codigo_postal) && !empty($pais)) {
+            $stmt = $pdo->prepare("INSERT INTO Direcciones (usuario_id, direccion, ciudad, codigo_postal, pais)
+                                   VALUES (:usuario_id, :direccion, :ciudad, :codigo_postal, :pais)");
+            $stmt->bindParam(':usuario_id', $id_usuario);
+            $stmt->bindParam(':direccion', $direccion);
+            $stmt->bindParam(':ciudad', $ciudad);
+            $stmt->bindParam(':codigo_postal', $codigo_postal);
+            $stmt->bindParam(':pais', $pais);
+            $stmt->execute();
+        }
+    }
+
     // Redirigir a la página de agradecimiento
-    header("Location: thankyou.html");
+    header("Location: thankyou.php");
     exit();
 
 } catch (PDOException $e) {

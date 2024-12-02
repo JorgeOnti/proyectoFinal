@@ -1,21 +1,28 @@
+<!-- /*
+* Bootstrap 5
+* Template Name: ONTI'S
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
 <!doctype html>
 <html lang="en">
 
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="author" content="ONTI'S">
+	<meta name="author" content="Untree.co">
 	<link rel="shortcut icon" href="favicon.png">
 
 	<meta name="description" content="" />
-	<meta name="keywords" content="fútbol, tienda deportiva, zapatos deportivos" />
+	<meta name="keywords" content="bootstrap, bootstrap4" />
 
 	<!-- Bootstrap CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 	<link href="css/tiny-slider.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
-	<title>Contacto - ONTI'S Zapatos de Fútbol</title>
+	<title>ONTI'S Free Bootstrap 5 Template for ONTI'Sture and Interior Design Websites by Untree.co </title>
 </head>
 
 <body>
@@ -108,81 +115,43 @@
 			<div class="row justify-content-between">
 				<div class="col-lg-5">
 					<div class="intro-excerpt">
-						<h1>Contacto</h1>
-						<p class="mb-4">¿Tienes alguna pregunta sobre nuestros zapatos de fútbol? Contáctanos, estamos
-							aquí para ayudarte.</p>
-						<p><a href="shop.php" class="btn btn-secondary me-2">Explorar</a><a href="about.php"
-								class="btn btn-white-outline">Sobre Nosotros</a></p>
+						<h1>Cart</h1>
 					</div>
 				</div>
 				<div class="col-lg-7">
-					<div class="hero-img-wrap">
-						<img src="images/football-contact.jpg" class="img-fluid" alt="Contacto fútbol">
-					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- End Hero Section -->
 
-	<!-- Start Contact Form -->
+
+
 	<div class="untree_co-section">
 		<div class="container">
-			<div class="block">
-				<div class="row justify-content-center">
-					<div class="col-md-8 col-lg-8 pb-4">
-						<form id="contact-form">
-							<div class="row">
-								<div class="col-6">
-									<div class="form-group">
-										<label class="text-black" for="fname">Nombre</label>
-										<input type="text" class="form-control" id="fname" required>
-									</div>
-								</div>
-								<div class="col-6">
-									<div class="form-group">
-										<label class="text-black" for="lname">Apellido</label>
-										<input type="text" class="form-control" id="lname" required>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="text-black" for="email">Correo Electrónico</label>
-								<input type="email" class="form-control" id="email" required>
-							</div>
-							<div class="form-group mb-5">
-								<label class="text-black" for="message">Mensaje</label>
-								<textarea name="" class="form-control" id="message" cols="30" rows="5"
-									required></textarea>
-							</div>
-							<button type="submit" class="btn btn-primary-hover-outline">Enviar Mensaje</button>
-						</form>
-
-						<!-- Mensaje de agradecimiento -->
-						<div id="thank-you-message" class="alert alert-success mt-4 d-none">
-							<strong>¡Gracias!</strong> Hemos recibido tu mensaje. Nos pondremos en contacto contigo a la
-							brevedad.
-						</div>
-					</div>
+			<div class="row">
+				<div class="col-md-12 text-center pt-5">
+					<span class="display-3 thankyou-icon text-primary">
+						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart-check mb-5"
+							fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M11.354 5.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708 0z" />
+							<path fill-rule="evenodd"
+								d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+						</svg>
+					</span>
+					<h2 class="display-3 text-black">Gracias por su compra!</h2>
+					<p class="lead mb-5">Su orden fue registrada exitosamente.</p>
+					<p><a href="shop.php" class="btn btn-sm btn-outline-black">Seguir Comprando</a></p>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- End Contact Form -->
 
-	<script>
-		document.getElementById("contact-form").addEventListener("submit", function (e) {
-			e.preventDefault(); // Evitar envío real del formulario
-
-			// Mostrar mensaje de agradecimiento
-			document.getElementById("thank-you-message").classList.remove("d-none");
-
-			// Limpiar los campos del formulario
-			document.getElementById("contact-form").reset();
-		});
-	</script>
 	<script src="js/bootstrap.bundle.min.js"></script>
-
+	<script src="js/tiny-slider.js"></script>
+	<script src="js/custom.js"></script>
 </body>
 
 </html>
